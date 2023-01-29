@@ -1,0 +1,26 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#root{
+    height: 100vh;
+}
+
+.background-task{
+    background: rgb(255,166,22);
+    background: linear-gradient(128deg, rgba(255,166,22,1) 0%, rgba(245,155,18,1) 100%);
+}
+
+.custom-scroll::-webkit-scrollbar{
+    width: 7px;
+    background-color: blanchedalmond;
+    border-radius: 100px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb{
+    border-radius: 100px;
+    background-color: cadetblue;
+    position: absolute;
+}
