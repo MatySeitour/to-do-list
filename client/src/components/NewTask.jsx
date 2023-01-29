@@ -1,5 +1,10 @@
 import {Formik, Form} from "formik"
+import { createTaskRequest } from "../api/tasks.api";
+import { useTasks } from "../Context/TasksContext";
+
 function NewTask(){
+    const {handleCreate} = useTasks();
+
     return(
         <div>
             <Formik 
@@ -7,19 +12,23 @@ function NewTask(){
                     title: "",
                     description: "",
                 }}
-                onSubmit={(values) => {
-                    console.log(values);
+                
+                onSubmit={async(values, actions) => {
+                        handleCreate(values);
+                        actions.resetForm();
                 }}
             >
-                {({handleChange}) => (
-                    <Form>
+                {({handleChange, handleSubmit, values, isSubmitting}) => (
+                    <Form onSubmit={handleSubmit}>
                         <label>Title</label>
-                        <input name="title" type="text" placeholder="Write a title" onChange={handleChange}/>
+                        <input name="title" type="text" placeholder="Write a title" onChange={handleChange} value={values.title}/>
                 
                         <label>Description</label>
-                        <textarea name="description" rows="3" placeholder="Write a description" onChange={handleChange}></textarea>
+                        <textarea name="description" rows="3" placeholder="Write a description" onChange={handleChange} value={values.description}></textarea>
                 
-                        <button>Save</button>
+                        <button type="submit" disabled={isSubmitting}>
+                            {isSubmitting ? "Saving..." : "Save"}
+                        </button>
                     </Form>
                 )}  
             </Formik>
