@@ -3,11 +3,15 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
 import {BrowserRouter} from "react-router-dom"
+import {TasksContextProvider} from './Context/TasksContext'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <TasksContextProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </TasksContextProvider>
   </React.StrictMode>,
+
 )
