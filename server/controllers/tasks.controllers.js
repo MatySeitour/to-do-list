@@ -32,6 +32,7 @@ export const createTask = async (req, res) => {
         const [result] = await pool.query(`INSERT INTO tasks(title, description) VALUES (?, ?)`, [title, description])
         return res.json({
             id: result.insertId,
+            title: req.body.title,
         });
     }
     catch (error) {
