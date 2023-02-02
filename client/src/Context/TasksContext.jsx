@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext } from "react";
+import { useState, createContext, useContext } from "react";
 import { getTasksRequest } from "../api/tasks.api";
 import { deleteTaskRequest } from "../api/tasks.api";
 import { createTaskRequest } from "../api/tasks.api";
@@ -31,13 +31,13 @@ export function TasksContextProvider({ children }) {
     const handleCreate = async (task) => {
         try{
             const response = await createTaskRequest(task);
-            console.log(response)
+            loadTasks();
         }
         catch(error){
             console.error(error)
         }
     }
-
+    
     async function loadTasks(){
         const {data} = await getTasksRequest();
         setTasks(data);
