@@ -10,7 +10,7 @@ app.use(express.json())
 
 app.use(indexRoutes);
 
-app.use(tasksRoutes);
+app.use("/tasks", tasksRoutes);
 
 app.listen(PORT)
 console.log("server is running")
