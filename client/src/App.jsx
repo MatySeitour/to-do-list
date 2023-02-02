@@ -3,7 +3,6 @@ import { Route, Routes } from 'react-router-dom'
 import { Tasks } from "./components/Tasks"
 import { NewTask } from './components/NewTask'
 import { NotFound } from './components/NotFound'
-import { Navbar } from './components/Navbar'
 
 function App() {
 
