@@ -3,14 +3,14 @@ import { getTasks, getTask, createTask, deleteTask, updateTask } from "../contro
 
 const router = Router();
 
-router.get("/tasks", getTasks)
+router.get("/", getTasks)
 
-router.get("/tasks/:id", getTask)
+router.get("/:id", getTask)
 
-router.post("/task", createTask)
+router.post("/", createTask)
 
-router.put("/tasks/:id", updateTask)
+router.put("/:id", updateTask)
 
-router.delete("/tasks/:id", deleteTask)
+router.delete("/:id", deleteTask)
 
 export default router;  
