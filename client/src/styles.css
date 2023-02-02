@@ -9,13 +9,16 @@
 }
 
 .background-task{
-    background: rgb(255,166,22);
-    background: linear-gradient(128deg, rgba(255,166,22,1) 0%, rgba(245,155,18,1) 100%);
+    background: linear-gradient(128deg, rgba(0,0,250,1) 0%, rgba(150,0,250,1) 100%);
+}
+
+.background-main{
+    background: linear-gradient(128deg, rgba(150,0,250,1) 20%, rgba(0,0,250,1) 100%);
 }
 
 .custom-scroll::-webkit-scrollbar{
     width: 7px;
-    background-color: blanchedalmond;
+    background-color: transparent;
     border-radius: 100px;
 }
 
@@ -23,4 +26,8 @@
     border-radius: 100px;
     background-color: cadetblue;
     position: absolute;
+}
+
+.shadow-text{
+    text-shadow: 1px 4px 0px #a0f;
 }
