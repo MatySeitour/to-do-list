@@ -29,6 +29,11 @@ export const getTask = async (req, res) => {
 export const createTask = async (req, res) => {
     try {
         const { title, description } = req.body;
+        if (title === "") {
+            return res.status(403).json({
+                message: "the task must have at least title"
+            })
+        }
         const [result] = await pool.query(`INSERT INTO tasks(title, description) VALUES (?, ?)`, [title, description])
         return res.json({
             id: result.insertId,
