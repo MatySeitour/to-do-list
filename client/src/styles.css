@@ -31,3 +31,7 @@
 .shadow-button__newTask:hover{
     box-shadow: 0px 0px 20px 6px #a0f;
 }
+
+.shadow-button__editTask:hover{
+    box-shadow: 0px 0px 20px 0px #fff;
+}
