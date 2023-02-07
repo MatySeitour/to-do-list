@@ -1,5 +1,5 @@
-import { useState, createContext, useContext } from "react";
-import { getTasksRequest, createTaskRequest, deleteTaskRequest, getTaskRequest  } from "../api/tasks.api";
+import { useState, createContext, useContext, useEffect } from "react";
+import { getTasksRequest, createTaskRequest, deleteTaskRequest, getTaskRequest, editTaskRequest  } from "../api/tasks.api";
 
 const TasksContext = createContext({});
 
@@ -15,7 +15,8 @@ export function TasksContextProvider({ children }) {
     const [tasks, setTasks] = useState([]);
     const [newTaskState, setNewTaskState] = useState(false);
     const [messageTitleError, setMessageTitleError] = useState(false);
-    const [taskEditState, setTaskEditState] = useState(false);
+    const [taskIdEdit, setTaskIdEdit] = useState(0);
+    const [taskEditData, setTaskEditData] = useState([]);
     
     
     const handleDelete = async (id) => {
@@ -42,15 +43,26 @@ export function TasksContextProvider({ children }) {
         }
     }
 
-    const handleEdit = async (taskId) => {
+    const handleGetTask = async (taskId) => {
         try{
-            const response = await getTaskRequest(taskId);
-            setTaskEditState(true);
-            console.log(response);
+            const {data} = await getTaskRequest(taskId);
+            setTaskIdEdit(taskId);
+            setTaskEditData(data);
         }
         catch(error){
             console.error(error)
         }
+    }
+
+    const handleEdit = async(taskId, newTask) => {
+        try{
+            const {data} = await editTaskRequest(taskId, newTask);
+            loadTasks();
+            console.log(data);
+        }
+        catch(error){
+            console.error(error)
+        } 
     }
     
     async function loadTasks(){
@@ -58,8 +70,12 @@ export function TasksContextProvider({ children }) {
         setTasks(data);
     }
 
+    useEffect(() => {
+        console.log(taskEditData)
+    }, [taskEditData]);
+
     return (
-        <TasksContext.Provider value={{tasks, loadTasks, handleDelete, handleCreate, newTaskState, setNewTaskState, messageTitleError, setMessageTitleError, handleEdit, taskEditState, setTaskEditState}}>
+        <TasksContext.Provider value={{tasks, loadTasks, handleDelete, handleCreate, newTaskState, setNewTaskState, messageTitleError, setMessageTitleError, handleGetTask, taskIdEdit, setTaskIdEdit, taskEditData, setTaskEditData, handleEdit}}>
             {children}
         </TasksContext.Provider>
     )
