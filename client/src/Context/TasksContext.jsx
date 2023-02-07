@@ -1,5 +1,5 @@
 import { useState, createContext, useContext, useEffect } from "react";
-import { getTasksRequest, createTaskRequest, deleteTaskRequest, getTaskRequest, editTaskRequest  } from "../api/tasks.api";
+import { getTasksRequest, createTaskRequest, deleteTaskRequest, getTaskRequest, editTaskRequest, toggleDoneRequest  } from "../api/tasks.api";
 
 const TasksContext = createContext({});
 
@@ -23,7 +23,6 @@ export function TasksContextProvider({ children }) {
         try{
             const response = await deleteTaskRequest(id);
             setTasks(tasks.filter(task => task.id !== id));
-            console.log(response);
         }
         catch(error){
             console.error(error)
@@ -56,9 +55,26 @@ export function TasksContextProvider({ children }) {
 
     const handleEdit = async(taskId, newTask) => {
         try{
-            const {data} = await editTaskRequest(taskId, newTask);
+            if(newTask.title === ""){
+                setMessageTitleError(true);
+                throw new Error;
+            }
+            else{
+                const {data} = await editTaskRequest(taskId, newTask);
+                setMessageTitleError(false);
+                loadTasks();
+                setTaskIdEdit(0);
+            }
+        }
+        catch(error){
+            console.error(error)
+        } 
+    }
+
+    const toggleDone = async(taskId, newDoneState) =>{
+        try{
+            const {data} = await toggleDoneRequest(taskId, newDoneState);
             loadTasks();
-            console.log(data);
         }
         catch(error){
             console.error(error)
@@ -70,12 +86,9 @@ export function TasksContextProvider({ children }) {
         setTasks(data);
     }
 
-    useEffect(() => {
-        console.log(taskEditData)
-    }, [taskEditData]);
 
     return (
-        <TasksContext.Provider value={{tasks, loadTasks, handleDelete, handleCreate, newTaskState, setNewTaskState, messageTitleError, setMessageTitleError, handleGetTask, taskIdEdit, setTaskIdEdit, taskEditData, setTaskEditData, handleEdit}}>
+        <TasksContext.Provider value={{tasks, loadTasks, handleDelete, handleCreate, newTaskState, setNewTaskState, messageTitleError, setMessageTitleError, handleGetTask, taskIdEdit, setTaskIdEdit, taskEditData, setTaskEditData, handleEdit, toggleDone}}>
             {children}
         </TasksContext.Provider>
     )
