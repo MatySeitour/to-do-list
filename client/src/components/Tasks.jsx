@@ -3,15 +3,24 @@ import { TaskEdit } from "./TaskEdit";
 import { useTasks } from "../Context/TasksContext";
 import { NewTask } from "./NewTask";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPenToSquare, faArrowLeft} from "@fortawesome/free-solid-svg-icons"
+import {faPenToSquare, faCheck, faXmark} from "@fortawesome/free-solid-svg-icons"
 import "../styles.css"
 
 function Tasks(){
-    const {tasks, loadTasks, handleDelete, newTaskState ,setNewTaskState, handleGetTask, taskIdEdit ,setTaskIdEdit} = useTasks();
+    const {tasks, loadTasks, handleDelete, newTaskState ,setNewTaskState, handleGetTask, taskIdEdit ,setTaskIdEdit, toggleDone} = useTasks();
 
     useEffect(() =>{
         loadTasks();
     }, [])
+
+    const handleDone = (task) =>{
+        if(task === 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    } 
 
 
     return(
@@ -52,6 +61,11 @@ function Tasks(){
                             <div onClick={() => handleGetTask(task.id)} className="absolute w-12 h-12 background-task cursor-pointer hover:scale-110 transition-all -left-2 -top-4 rounded-full flex justify-center items-center">
                                 <FontAwesomeIcon icon={faPenToSquare} className="text-white text-xl font-extrabold" />
                             </div>
+                            {task.done === 0 ? 
+                            <div onClick={() => toggleDone(task.id, handleDone(task.done))} className="hover:scale-110 transition-all select-none w-12 h-12 bg-red-600 absolute -right-2 -bottom-2 rounded-full flex justify-center items-center text-white cursor-pointer"><FontAwesomeIcon className="text-2xl" icon={faXmark}/></div>
+                            :
+                            <div onClick={() => toggleDone(task.id, handleDone(task.done))} className="hover:scale-110 transition-all select-none w-12 h-12 bg-green-600 absolute -right-2 -bottom-2 rounded-full flex justify-center items-center text-white cursor-pointer"><FontAwesomeIcon className="text-2xl" icon={faCheck}/></div>
+                        }
                         </li>
                     ))}
                     {taskIdEdit ? 
