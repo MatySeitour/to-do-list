@@ -1,12 +1,13 @@
 import { useState, useEffect, useContext } from "react";
+import { TaskEdit } from "./TaskEdit";
 import { useTasks } from "../Context/TasksContext";
 import { NewTask } from "./NewTask";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPenToSquare, faArrowLeft, faA} from "@fortawesome/free-solid-svg-icons"
+import {faPenToSquare, faArrowLeft} from "@fortawesome/free-solid-svg-icons"
 import "../styles.css"
 
 function Tasks(){
-    const {tasks, loadTasks, handleDelete, newTaskState ,setNewTaskState, handleEdit, taskEditState ,setTaskEditState} = useTasks();
+    const {tasks, loadTasks, handleDelete, newTaskState ,setNewTaskState, handleGetTask, taskIdEdit ,setTaskIdEdit} = useTasks();
 
     useEffect(() =>{
         loadTasks();
@@ -48,17 +49,15 @@ function Tasks(){
                             <div onClick={() => handleDelete(task.id)} className="absolute w-12 h-12 background-main cursor-pointer hover:scale-110 transition-all -right-2 -top-4 rounded-full flex justify-center items-center">
                                 <span className="text-white text-xl font-extrabold">X</span>
                             </div>
-                            <div onClick={() => handleEdit(task.id)} className="absolute w-12 h-12 background-task cursor-pointer hover:scale-110 transition-all -left-2 -top-4 rounded-full flex justify-center items-center">
+                            <div onClick={() => handleGetTask(task.id)} className="absolute w-12 h-12 background-task cursor-pointer hover:scale-110 transition-all -left-2 -top-4 rounded-full flex justify-center items-center">
                                 <FontAwesomeIcon icon={faPenToSquare} className="text-white text-xl font-extrabold" />
                             </div>
                         </li>
                     ))}
-                    {taskEditState && 
-                        <div className="fixed top-0 left-0 h-screen w-screen bg-black bg-opacity-70 flex justify-center items-center">
-                            <div className="relative min-w-[300px] max-w-[300px] h-[500px] background-task m-4 rounded-xl flex flex-col items-center pt-3 custom-scroll shadow-2xl break-words">
-                                <span className="absolute right-4 text-3xl"><FontAwesomeIcon icon={faArrowLeft} /></span>
-                            </div>
-                        </div>
+                    {taskIdEdit ? 
+                        <TaskEdit taskIdEdit={taskIdEdit} setTaskIdEdit={setTaskIdEdit} />
+                        :
+                        <></>
                     }
                 </ul>
             </div>
