@@ -1,11 +1,14 @@
 import { pool } from "../db.js";
 
-export const getTasks = async (req, res) => {
+
+export const getTasks = async (req, res, next) => {
     try {
-        const [result] = await pool.query("SELECT * FROM tasks ORDER BY createdAt ASC");
-        return res.json(result);
+        const userId = req.user.id;
+        const [result] = await pool.query(`SELECT * FROM users LEFT JOIN tasks ON users.id = tasks.userid WHERE tasks.userid=${userId}`);
+        res.send(result);
     }
     catch (error) {
+        next(error);
         return res.status(500).json({ message: error.message });
     }
 }
@@ -26,24 +29,25 @@ export const getTask = async (req, res) => {
     }
 }
 
-export const createTask = async (req, res) => {
-    try {
-        const { title, description } = req.body;
-        if (title === "") {
-            return res.status(403).json({
-                message: "the task must have at least title"
-            })
+export const createTask =
+    async (req, res) => {
+        try {
+            const { title, description } = req.body;
+            if (title === "") {
+                return res.status(403).json({
+                    message: "the task must have at least title"
+                })
+            }
+            const [result] = await pool.query(`INSERT INTO tasks(title, description, userid) VALUES (?, ?, ?)`, [title, description, req.user.id])
+            return res.json({
+                id: result.insertId,
+                title: req.body.title,
+            });
         }
-        const [result] = await pool.query(`INSERT INTO tasks(title, description) VALUES (?, ?)`, [title, description])
-        return res.json({
-            id: result.insertId,
-            title: req.body.title,
-        });
+        catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
     }
-    catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
-}
 
 export const updateTask = async (req, res) => {
     try {
@@ -72,14 +76,18 @@ export const deleteTask = async (req, res) => {
         const [result] = await pool.query(`DELETE FROM tasks WHERE id = ${id}`);
 
         if (result.affectedRows === 0) {
-            return res.sendStatus(404).json({ message: "task not found" })
+            return res.status(404).json({
+                message: "Not Found"
+            })
         }
         else {
-            return res.sendStatus(204)
+            return res.json({
+                message: "Task deleted"
+            })
         }
 
     }
     catch (error) {
-        return res.status(500).json({ message: error.message });
+        console.error(error)
     }
 }
