@@ -1,16 +1,20 @@
 import { Router } from "express";
 import { getTasks, getTask, createTask, deleteTask, updateTask } from "../controllers/tasks.controllers.js";
+import passport from "passport";
+
 
 const router = Router();
 
-router.get("/", getTasks)
+router.use(passport.authenticate("jwt", { session: false }));
 
-router.get("/:id", getTask)
+router.get("/", passport.authenticate("jwt", { session: false }), getTasks)
 
-router.post("/", createTask)
+router.get("/:id", passport.authenticate("jwt", { session: false }), getTask)
 
-router.put("/:id", updateTask)
+router.post("/", passport.authenticate("jwt", { session: false }), createTask);
 
-router.delete("/:id", deleteTask)
+router.put("/:id", passport.authenticate("jwt", { session: false }), updateTask)
+
+router.delete("/:id", passport.authenticate("jwt", { session: false }), deleteTask)
 
 export default router;  
