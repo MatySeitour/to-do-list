@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { config } from "../config.js";
 import passport from "passport";
 import cookieParser from "cookie-parser";
-import { createUser, logOut, loginVerify, getUsers, recoveryPassword } from "../controllers/login.controller.js";
+import { createUser, logOut, loginVerify, getUsers, recoveryPassword, passwordToChange, getEmailUser } from "../controllers/login.controller.js";
 import { login } from "../controllers/login.controller.js";
 
 const router = Router();
@@ -16,7 +16,11 @@ router.post("/login", passport.authenticate("local", { session: false }), login)
 
 router.get("/session", passport.authenticate("jwt", { session: false }), loginVerify);
 
-router.post("/recovery", passport.authenticate("jwt", { session: false }), recoveryPassword);
+router.post("/email", getEmailUser);
+
+router.post("/recovery", recoveryPassword);
+
+router.post("/new-password", passwordToChange);
 
 router.get("/logout", logOut);
 
