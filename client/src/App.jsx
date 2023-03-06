@@ -1,17 +1,20 @@
 import './styles.css'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useSearchParams } from 'react-router-dom'
 import { Tasks } from "./components/Tasks"
 import { NewTask } from './components/NewTask'
 import { NotFound } from './components/NotFound'
 import { Register } from './components/Register'
 import { Login } from './components/Login'
+import { RecoveryPassword } from './components/RecoveryPassword'
+import { NewPassword } from './components/NewPassword'
 import { useUsers } from './Context/UsersContext'
 
 
 function Authenticate({children}){
   const {session} = useUsers();
+  console.log(session);
   const navigate = useNavigate();
   useEffect(() => {
     if (!session.loggin && !session.loading) { 
@@ -29,7 +32,6 @@ function AuthenticateLogin({children}){
   const navigate = useNavigate();
   useEffect(() => {
     if (session.loggin && !session.loading) { 
-      console.log("entra ")
       navigate("/tasks");
     }
   }, [session, navigate]);
@@ -41,7 +43,9 @@ function App() {
   return (
     <>
           <Routes>
-            <Route path='/register' element={<Register />} />
+            <Route path='/register' element={<AuthenticateLogin>
+                <Register />
+              </AuthenticateLogin>} />
             <Route index element={<Login />} />
             <Route path='/login' element={<AuthenticateLogin>
               <Login />
@@ -52,6 +56,8 @@ function App() {
                 </Authenticate>
               } 
             />
+            <Route path='/recovery-password' element={<RecoveryPassword />} />
+            <Route path='/new-password?' element={<NewPassword />} />
             <Route path='*' element={<NotFound />} />
         </Routes>  
     </>
