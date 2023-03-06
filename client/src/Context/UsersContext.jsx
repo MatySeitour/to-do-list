@@ -1,6 +1,6 @@
 import { useState, createContext, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createUserRequest, sessionRequest, loginRequest, logoutRequest } from "../api/login.api";
+import { createUserRequest, sessionRequest, loginRequest, logoutRequest, sendMailToRecovery, createNewPassword } from "../api/login.api";
 
 const UsersContext = createContext({});
 
@@ -26,6 +26,14 @@ export function UsersContextProvider({ children }) {
 );
 
     const [loginMessageError, setLoginMessageError] = useState(false);
+
+    const [sendMailRecoveryMessage, setSendMailRecoveryMessage] = useState(false);
+
+    const [sectionMailSent, setSectionMailSent] = useState(false);
+
+    const [sendLoadingButton, setLoadingButton] = useState(false);
+
+    const [nameEmailSent, setNameEmailSent] = useState("");
 
     const navigate = useNavigate();
 
@@ -103,12 +111,39 @@ export function UsersContextProvider({ children }) {
         }
     }
 
+    const handleSendEmailRecovery = async (inputUser) => {
+        try{
+            setLoadingButton(true);
+            const response = await sendMailToRecovery(inputUser);
+            setLoadingButton(false);
+            setSectionMailSent(true);
+            setSendMailRecoveryMessage(false);
+            setNameEmailSent(response.data.mail.to);
+        }
+        catch(error){
+            setLoadingButton(false);
+            console.error(error)
+            setSendMailRecoveryMessage(true);
+        }
+    }
+
+    const handleNewPassword = async (newPassword) => {
+        try{
+            const response = await createNewPassword(newPassword);
+            console.log(response);
+        }
+        catch(error){
+            console.error(error);
+        }
+    }
+
 
     return (
-        <UsersContext.Provider value={{handleCreateUser, handleLogin, handleLogout, loginMessageError, session, setSession}}>
+        <UsersContext.Provider value={{handleCreateUser, handleLogin, handleLogout, loginMessageError, session, setSession, handleSendEmailRecovery, sendMailRecoveryMessage, sectionMailSent, sendLoadingButton, setSectionMailSent, handleNewPassword, nameEmailSent}}>
             { children }
         </UsersContext.Provider>
     )
 }
+
 
 export default UsersContext;
