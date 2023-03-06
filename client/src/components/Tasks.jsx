@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { TaskEdit } from "./TaskEdit";
 import { Nav } from "./Nav";
 import { useTasks } from "../Context/TasksContext";
@@ -30,27 +29,28 @@ function Tasks(){
         return(
             <>
                 <Nav />
-                <main className="relative w-full h-full flex justify-center items-center p-4 pt-20 bg-white overflow-hidden  overflow-y-scroll custom-scroll">
-                <div className="w-full h-full rounded-lg">
-                    <h1 className="text-[#a0f] text-center mt-5 mb-5 text-2xl tracking-wider font-extrabold">WELCOME TO THE TO DO LIST!</h1>
+                <main className="relative w-full min-h-full h-auto flex justify-center items-center p-4 pl-5 pt-20 bg-slate-300 overflow-hidden overflow-y-scroll custom-scroll">
+                {newTaskState ? <div className="w-full h-full absolute bg-black z-10 top-0 left-0 right-0 bg-opacity-70"></div> : <div></div>}
+                <div className="w-full h-full min-h-[500px] rounded-lg bg-white">
+                    <h1 className="text-[#a0f] pl-2 pr-2 text-center mt-5 mb-5 text-2xl tracking-wider font-extrabold">WELCOME TO TASKSKER!</h1>
                     <div className="w-full flex h-auto justify-center">
-                        <button onClick={() => setNewTaskState(prevState => !prevState)} className="bg-[#a0f] shadow-lg hover:animate-wiggle hover:bg-[#a0f] hover:text-white transition-all p-2 rounded-md font-extrabold text-[#fff]">CREATE A NEW TASK!</button>
+                        <button onClick={() => setNewTaskState(prevState => !prevState)} className="background-main shadow-lg hover:animate-wiggle transition-all p-2 rounded-md font-extrabold text-[#fff]">CREATE A NEW TASK!</button>
                     </div>
-                    {newTaskState ? 
                         <>
-                            <div className="fixed top-[50%] left-[50%] overflow-hidden -translate-x-[50%] -translate-y-[50%] min-w-[auto] h-3/4 z-20 bg-white rounded-lg">
-                                <div className="absolute w-32 h-32 -bottom-10 -left-10 bg-[#a0f] rounded-full"></div>
-                                <div className="absolute w-32 h-32 -top-10 -right-10 bg-[#00f] rounded-full -z-10"></div>
-                                <div className="w-full h-full">
-                                    <NewTask newTaskState={newTaskState}/>
-                                </div>
+                            <div className={newTaskState ? "scale-100 transition-all fixed top-[50%] left-[50%] overflow-hidden -translate-x-[50%] -translate-y-[50%] min-w-[auto] h-[500px] z-10 bg-white rounded-lg" : "scale-0 top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] transition-all absolute"}>
+                                {newTaskState ? 
+                                    <>
+                                        <div className="w-full h-full">
+                                                <NewTask newTaskState={newTaskState}/>
+                                        </div>
+                                    </>
+                                    
+                                    :
+                                    
+                                    <div></div>
+                                }
                             </div>
-                        </> 
-                
-                        : 
-                            
-                        <div></div>
-                    }
+                        </>    
                         
                     <ul className="w-full flex justify-center items-center flex-wrap pt-4">
                         {tasks.length === 0 ? <h2 className="text-[#a0f] font-bold tracking-wider">NOT TASK CREATED YET...</h2> : <div></div>}
