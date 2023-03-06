@@ -8,6 +8,12 @@
     height: 100vh;
 }
 
+.background-login{
+    background-color: #ffffff;
+    background: radial-gradient(circle, transparent 20%, #ffffff 20%, #ffffff 80%, transparent 80%, transparent), radial-gradient(circle, transparent 20%, #ffffff 20%, #ffffff 80%, transparent 80%, transparent) 72.5px 72.5px, linear-gradient(#aa00ff 5.800000000000001px, transparent 5.800000000000001px) 0 -2.9000000000000004px, linear-gradient(90deg, #aa00ff 5.800000000000001px, #ffffff 5.800000000000001px) -2.9000000000000004px 0;
+    background-size: 145px 145px, 145px 145px, 72.5px 72.5px, 72.5px 72.5px;
+}
+
 .background-task{
     background: linear-gradient(128deg, rgba(0,0,250,1) 0%, rgba(150,0,250,1) 100%);
 }
@@ -16,8 +22,15 @@
     background: linear-gradient(128deg, rgba(150,0,250,1) 20%, rgba(0,0,250,1) 100%);
 }
 
+.background-recovery{
+    background-color: #e5e5f7;
+background-image:  linear-gradient(30deg, #6a00ff 12%, transparent 12.5%, transparent 87%, #6a00ff 87.5%, #6a00ff), linear-gradient(150deg, #6a00ff 12%, transparent 12.5%, transparent 87%, #6a00ff 87.5%, #6a00ff), linear-gradient(30deg, #6a00ff 12%, transparent 12.5%, transparent 87%, #6a00ff 87.5%, #6a00ff), linear-gradient(150deg, #6a00ff 12%, transparent 12.5%, transparent 87%, #6a00ff 87.5%, #6a00ff), linear-gradient(60deg, #6a00ff77 25%, transparent 25.5%, transparent 75%, #6a00ff77 75%, #6a00ff77), linear-gradient(60deg, #6a00ff77 25%, transparent 25.5%, transparent 75%, #6a00ff77 75%, #6a00ff77);
+background-size: 68px 119px;
+background-position: 0 0, 0 0, 34px 60px, 34px 60px, 0 0, 34px 60px;
+}
+
 .custom-scroll::-webkit-scrollbar{
-    width: 7px;
+    width: 0px;
 }
 
 .custom-scroll::-webkit-scrollbar-thumb{
@@ -34,4 +47,38 @@
 
 .shadow-button__editTask:hover{
     box-shadow: 0px 0px 20px 0px #fff;
+}
+
+.shadow-login{
+    box-shadow: 0px 0px 10px #000;
+}
+
+.line-before::before{
+    content: "";
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    position: absolute;
+    background-color: #fff;
+    transition: all .5s ease;
+}
+
+.line-before:hover.line-before::before{
+    width: 100%;
+    transition: all .5s ease;
+}
+
+.line-before__register::before{
+    content: "";
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    position: absolute;
+    background-color: #a0f;
+    transition: all .5s ease;
+}
+
+.line-before__register:hover.line-before__register::before{
+    width: 100%;
+    transition: all .5s ease;
 }
