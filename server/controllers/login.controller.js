@@ -98,8 +98,8 @@ export const loginVerify = async (req, res, next) => {
 
 export const recoveryPassword = async (req, res, next) => {
     try {
-        const { email } = req.body;
-        const rta = await recoverySendMail(email);
+        const { email, username } = req.body;
+        const rta = await recoverySendMail(email, username);
         res.json(rta);
     }
     catch (error) {
@@ -108,18 +108,18 @@ export const recoveryPassword = async (req, res, next) => {
     }
 }
 
-export const recoverySendMail = async (email) => {
-    const user = await getEmailUser(email);
+export const recoverySendMail = async (email, username) => {
+    const user = await getEmailUser(email, username);
     if (!user) {
-        console.log(user);
-        throw boom.unauthorized();
+        throw boom.unauthorized().output.payload;
     }
     const payload = { id: user.id };
-    const token = jwt.sign(payload, config.jwtSecret);
-    const link = `http://localhost:5173/recovery?token=${token}`;
+    const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "15min" });
+    const link = `http://localhost:5173/new-password?token=${token}`;
+    await updateRecoveryToken(user.id, token);
     const mail = {
         from: config.EMAIL_ADDRESS, // sender address
-        to: email, // list of receivers
+        to: user.email, // list of receivers
         subject: "email to recover password", // Subject line
         html: `<b>ingresa a este link => ${link}</b>`, // html body
     }
@@ -139,15 +139,71 @@ async function sendMail(infoMail) {
     });
 
     await transporter.sendMail(infoMail);
-    return { message: "mail sent" }
+    return { message: "mail sent", mail: infoMail }
 }
 
-export const getEmailUser = async (email) => {
+export const getEmailUser = async (email, username) => {
     try {
-        const [result] = await pool.query(`SELECT * FROM users WHERE email="${email}"`);
+        if (!email) {
+            const [result] = await pool.query(`SELECT * FROM users WHERE username="${username}"`);
+            return result[0];
+        }
+        else if (!username) {
+            const [result] = await pool.query(`SELECT * FROM users WHERE email="${email}"`);
+            return result[0];
+        }
+    }
+    catch (error) {
+        console.error(error)
+    }
+
+}
+export const getIdUser = async (id) => {
+    try {
+        const [result] = await pool.query(`SELECT * FROM users WHERE id="${id}"`);
         return result[0];
     }
     catch (error) {
         console.error(error)
+    }
+}
+
+export const updateRecoveryToken = async (userId, recoveryToken) => {
+    try {
+        const [result] = await pool.query(`UPDATE users SET recovery_token=? WHERE id=?`, [recoveryToken, userId]);
+        return result;
+    }
+    catch (error) {
+        console.error(error)
+    }
+}
+
+export const passwordToChange = async (req, res, next) => {
+    try {
+        const { token, newPassword } = req.body;
+        const payload = jwt.verify(token, config.jwtSecret);
+        const user = await getIdUser(payload.id);
+        if (user.recovery_token !== token) {
+            throw boom.unauthorized();
+        }
+        const rta = await changePassword(user, newPassword);
+        return res.json({
+            rta
+        })
+    }
+    catch (error) {
+        console.error("entra aca", error);
+        next(error);
+    }
+}
+
+export const changePassword = async (user, newPassword) => {
+    try {
+        const hash = await bcrypt.hash(newPassword, 10);
+        await pool.query(`UPDATE users SET recovery_token=null, password=? WHERE id=?`, [hash, user.id]);
+        return { message: "password changed" };
+    }
+    catch (error) {
+        throw boom.clientTimeout().output.payload.message;
     }
 }
