@@ -1,7 +1,6 @@
 import express from "express"
 import cors from "cors"
 import { config } from "./config.js";
-import indexRoutes from "./routes/index.routes.js"
 import tasksRoutes from "./routes/tasks.routes.js"
 import authRoutes from "./routes/auth.routes.js"
 import "./utils/auth/index.js"
@@ -12,9 +11,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
-
-app.use(indexRoutes);
-
 
 app.use("/api/tasks", tasksRoutes);
 app.use("/api/auth", authRoutes);
