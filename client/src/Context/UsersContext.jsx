@@ -35,6 +35,8 @@ export function UsersContextProvider({ children }) {
 
     const [nameEmailSent, setNameEmailSent] = useState("");
 
+    const [registerErrorMessage, setRegisterErrorMessage] = useState(0);
+
     const navigate = useNavigate();
 
     function handleNavigateTasks(){
@@ -69,10 +71,19 @@ export function UsersContextProvider({ children }) {
 
     const handleCreateUser = async (user) => {
         try{
+            setRegisterErrorMessage(0)
             const response = await createUserRequest(user);
-            console.log(response);
         }
         catch(error){
+            if(user.username === "" || user.username.length < 3){
+                setRegisterErrorMessage(1)
+            }
+            else if(user.password === "" || user.password.length < 5){
+                setRegisterErrorMessage(2)
+            }
+            else if(user.email === ""){
+                setRegisterErrorMessage(3)
+            }
             console.error(error)
         }
     }
@@ -103,7 +114,6 @@ export function UsersContextProvider({ children }) {
                 loggin: false,
                 loading: false,
             });
-            console.log("logout", response);
         }
         catch(error){
             setSession(prev => ({...prev, loading: false}));
@@ -114,6 +124,7 @@ export function UsersContextProvider({ children }) {
     const handleSendEmailRecovery = async (inputUser) => {
         try{
             setLoadingButton(true);
+            
             const response = await sendMailToRecovery(inputUser);
             setLoadingButton(false);
             setSectionMailSent(true);
@@ -130,7 +141,6 @@ export function UsersContextProvider({ children }) {
     const handleNewPassword = async (newPassword) => {
         try{
             const response = await createNewPassword(newPassword);
-            console.log(response);
         }
         catch(error){
             console.error(error);
@@ -139,7 +149,7 @@ export function UsersContextProvider({ children }) {
 
 
     return (
-        <UsersContext.Provider value={{handleCreateUser, handleLogin, handleLogout, loginMessageError, session, setSession, handleSendEmailRecovery, sendMailRecoveryMessage, sectionMailSent, sendLoadingButton, setSectionMailSent, handleNewPassword, nameEmailSent}}>
+        <UsersContext.Provider value={{handleCreateUser, handleLogin, handleLogout, loginMessageError, session, setSession, handleSendEmailRecovery, sendMailRecoveryMessage, sectionMailSent, sendLoadingButton, setSectionMailSent, handleNewPassword, nameEmailSent, registerErrorMessage}}>
             { children }
         </UsersContext.Provider>
     )
