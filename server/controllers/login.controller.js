@@ -9,12 +9,12 @@ import boom from "@hapi/boom"
 export const createUser = async (req, res) => {
     try {
         const { username, password, email } = req.body;
-        if (username === "") {
-            return res.status(500).json({
+        if (username === "" || username.length < 3) {
+            return res.status(401).json({
                 message: "username must have at least 3 characters"
             })
         }
-        else if (password === "") {
+        else if (password === "" || password.length < 5) {
             return res.status(500).json({
                 message: "password must have at least 5 characters"
             })
