@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 function MailSent({sectionMailSent, setSectionMailSent, nameEmailSent}){
     const navigate = useNavigate();
-    console.log()
     return(
         <div className={sectionMailSent ? "w-full h-full rounded-xl min-h-[400px] background-task p-10 pt-14 flex flex-col justify-between items-center absolute -right-[0] radius transition-all" : "w-full h-full rounded-xl min-h-[400px] background-task p-10 pt-14 flex flex-col justify-between items-center absolute -right-[1200px] radius"}>
                 <h3 className="text-white font-bold text-lg tracking-wider mb-3 transition-all">RECOVERY PASSWORD</h3>
