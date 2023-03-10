@@ -14,7 +14,6 @@ import { useUsers } from './Context/UsersContext'
 
 function Authenticate({children}){
   const {session} = useUsers();
-  console.log(session);
   const navigate = useNavigate();
   useEffect(() => {
     if (!session.loggin && !session.loading) { 
@@ -43,10 +42,15 @@ function App() {
   return (
     <>
           <Routes>
-            <Route path='/register' element={<AuthenticateLogin>
+            <Route path='/register' element={
+              <AuthenticateLogin>
                 <Register />
-              </AuthenticateLogin>} />
-            <Route index element={<Login />} />
+              </AuthenticateLogin>
+            } />
+            <Route index element={
+            <AuthenticateLogin>
+              <Login />
+            </AuthenticateLogin>} />
             <Route path='/login' element={<AuthenticateLogin>
               <Login />
             </AuthenticateLogin>} />
