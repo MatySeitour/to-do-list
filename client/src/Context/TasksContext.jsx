@@ -14,10 +14,11 @@ export const useTasks = () => {
 export function TasksContextProvider({ children }) {
     const [tasks, setTasks] = useState([]);
     const [newTaskState, setNewTaskState] = useState(false);
-    const [messageTitleError, setMessageTitleError] = useState(false);
+    const [messageTitleError, setMessageTitleError] = useState(0);
     const [taskIdEdit, setTaskIdEdit] = useState(0);
+    const [taskIdDetail, setTaskIdDetail] = useState(0);
     const [taskEditData, setTaskEditData] = useState([]);
-    
+    const [taskDetails, setTaskDetails] = useState([]);
     
     const handleDelete = async (id) => {
         try{
@@ -34,11 +35,15 @@ export function TasksContextProvider({ children }) {
             const response = await createTaskRequest(task);
             loadTasks();
             setNewTaskState(false);
-            setMessageTitleError(false);
+            setMessageTitleError(0);
         }
         catch(error){
-            setMessageTitleError(true);
+            if(task.title.length > 20){
+                console.error(error)
+                return setMessageTitleError(1);
+            }
             console.error(error)
+            setMessageTitleError(2);
         }
     }
 
@@ -50,6 +55,17 @@ export function TasksContextProvider({ children }) {
         }
         catch(error){
             console.error(error)
+        }
+    }
+
+    const handleTask = async(taskId) =>{
+        try{
+            const {data} = await getTaskRequest(taskId);
+            setTaskIdDetail(taskId);
+            setTaskDetails(data);
+        }
+        catch(error){
+            console.error(error);
         }
     }
 
@@ -87,8 +103,9 @@ export function TasksContextProvider({ children }) {
     }
 
 
+
     return (
-        <TasksContext.Provider value={{tasks, loadTasks, handleDelete, handleCreate, newTaskState, setNewTaskState, messageTitleError, setMessageTitleError, handleGetTask, taskIdEdit, setTaskIdEdit, taskEditData, setTaskEditData, handleEdit, toggleDone}}>
+        <TasksContext.Provider value={{tasks, loadTasks, handleDelete, handleCreate, newTaskState, setNewTaskState, messageTitleError, setMessageTitleError, handleGetTask, taskIdEdit, setTaskIdEdit, taskEditData, setTaskEditData, handleEdit, toggleDone, handleTask, taskDetails, setTaskDetails, taskIdDetail,setTaskIdDetail}}>
             {children}
         </TasksContext.Provider>
     )
