@@ -41,29 +41,32 @@ function App() {
 
   return (
     <>
-          <Routes>
-            <Route path='/register' element={
-              <AuthenticateLogin>
-                <Register />
-              </AuthenticateLogin>
-            } />
-            <Route index element={
-            <AuthenticateLogin>
-              <Login />
-            </AuthenticateLogin>} />
-            <Route path='/login' element={<AuthenticateLogin>
-              <Login />
-            </AuthenticateLogin>} />
-            <Route path='/tasks' element={
-                <Authenticate>
-                  <Tasks />
-                </Authenticate>
-              } 
-            />
-            <Route path='/recovery-password' element={<RecoveryPassword />} />
-            <Route path='/new-password?' element={<NewPassword />} />
-            <Route path='*' element={<NotFound />} />
-        </Routes>  
+      <Routes>
+        <Route path='/register' element={
+          <AuthenticateLogin>
+            <Register />
+          </AuthenticateLogin>
+          } 
+        />
+        <Route index element={
+          <AuthenticateLogin>
+            <Login />
+          </AuthenticateLogin>
+          } 
+          />
+        <Route path='/login' element={<AuthenticateLogin>
+          <Login />
+          </AuthenticateLogin>} />
+        <Route path='/tasks' element={
+            <Authenticate>
+              <Tasks />
+            </Authenticate>
+          } 
+        />
+        <Route path='/recovery-password' element={<RecoveryPassword />} />
+        <Route path='/new-password?' element={<NewPassword />} />
+        <Route path='*' element={<NotFound />} />
+      </Routes>  
     </>
 
   )

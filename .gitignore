@@ -1,14 +1,3 @@
-node_modules
-db.js
-.env
-config.js
-User.jsx
-nodemailer.js
-pass-hash.js
-pass-verify.js
-token-sign.js
-token-verify.js
-
 # Logs
 logs
 *.log
@@ -18,6 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+node_modules
 dist
 dist-ssr
 *.local
